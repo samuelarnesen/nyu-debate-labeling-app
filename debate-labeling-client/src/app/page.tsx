@@ -22,7 +22,7 @@ const MainView: React.FC = () => {
 
   return (
     <div className="flex h-screen overflow-auto">
-      <div className="w-1/3 bg-gray-200 text-black overflow-auto"> {}
+      <div className="w-32/100 bg-gray-200 text-black overflow-auto"> {}
         <TranscriptList setTranscript={setTranscript} setTranscriptId={setTranscriptId} selectedTranscriptId={transcriptId} setQuestion={setQuestion} setAnswers={setAnswers}/>
       </div>
       <div className="flex-1 bg-gray-100 text-black overflow-auto space-y-4"> {}

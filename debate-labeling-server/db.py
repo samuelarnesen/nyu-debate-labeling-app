@@ -46,6 +46,7 @@ class DebateDatabase:
             and "GPT-4" not in roles
             and 0 in positions
             and 1 in positions
+            and "Offline Judge" not in roles
         )
 
     def __construct_kv_store(self) -> dict[str, DebateRow]:
@@ -55,6 +56,7 @@ class DebateDatabase:
         else:
             with open(DATA_PATH) as f:
                 rows = [DebateRow(**json.loads(line)) for line in f.readlines()]
+
             kv_store = {}
             for row in filter(self.__should_keep, rows):
                 kv_store.setdefault(f"{row.storyTitle}_{row.debateId}", row)
@@ -88,13 +90,11 @@ class DebateDatabase:
             if re.search(regex, turn.text, flags=re.DOTALL):
                 turn.text = re.sub(regex, text, turn.text, flags=re.DOTALL)
                 return turn.text
+        for turn in filter(lambda x: x.role == role and x.index == index, row.turns or []):
+            print("Next speech:")
+            print(turn.text)
         return None
 
     def save(self):
         with open(PICKLE_PATH, "wb") as f:
             pickle.dump(self.kv_store, f)
-
-
-if __name__ == "__main__":
-    db = DebateDatabase()
-    print(len(db.get_data()))
